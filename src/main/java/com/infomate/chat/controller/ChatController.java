@@ -2,10 +2,13 @@ package com.infomate.chat.controller;
 
 import com.infomate.chat.dto.MessageDTO;
 import com.infomate.chat.service.ChatService;
+import com.infomate.common.ResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.context.event.EventListener;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
@@ -13,6 +16,8 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
@@ -76,4 +81,25 @@ public class ChatController {
         );
     }
 
+
+    @GetMapping("/chat/{userId}")
+    public ResponseEntity<ResponseDTO> findAllMessage(@PathVariable Integer userId){
+
+        return ResponseEntity.ok()
+                .body(ResponseDTO.builder()
+                                .statusCode(HttpStatus.OK.value())
+                                .message("success")
+                                .data(chatService.findAllMessage(userId))
+                                .build());
+    }
+
+    @GetMapping("/chat/room/{roomId}")
+    public ResponseEntity<ResponseDTO> findAllMessageByRoomAndCreateDate(@PathVariable Integer roomId){
+        return ResponseEntity.ok()
+                .body(ResponseDTO.builder()
+                        .statusCode(HttpStatus.OK.value())
+                        .message("success")
+                        .data(chatService.findAllMessageByRoom(roomId))
+                        .build());
+    }
 }
