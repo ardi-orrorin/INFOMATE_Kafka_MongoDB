@@ -15,8 +15,6 @@ public class MessageDTO {
 
     private int sender;
 
-    private int receiver;
-
     private int chatRoomNo;
 
     private List<Integer> receiveList;

@@ -1,4 +1,4 @@
-package com.infomate.common;
+package com.infomate.chat.common;
 
 
 import lombok.*;

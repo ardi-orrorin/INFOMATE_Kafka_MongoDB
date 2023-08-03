@@ -2,7 +2,7 @@ package com.infomate.chat.controller;
 
 import com.infomate.chat.dto.MessageDTO;
 import com.infomate.chat.service.ChatService;
-import com.infomate.common.ResponseDTO;
+import com.infomate.chat.common.ResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -16,6 +16,7 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,16 +40,19 @@ public class ChatController {
 
     private final ChatService chatService;
 
+    @Async(value = "asyncThreadPool")
     @EventListener
     public void webSocketConnect(SessionConnectEvent event){
         System.out.println("event = " + event);
     }
 
+    @Async(value = "asyncThreadPool")
     @EventListener
     public void webSocketDisConnect(SessionDisconnectEvent event){
         System.out.println("event = " + event);
     }
 
+    @Async(value = "asyncThreadPool")
     @MessageMapping("/chat/{receiver}")
     public void subScriber(@DestinationVariable Integer receiver, MessageDTO message){
         log.info("[ChatController](subScriber) receiver : {}", receiver);
@@ -69,6 +73,7 @@ public class ChatController {
 
     }
 
+    @Async(value = "asyncThreadPool")
     @KafkaListener(topics = "topic01", groupId = "foo")
     public void publisher(@Payload MessageDTO message){
         log.info("[ChatController](publisher) receiver : {}", message);
@@ -82,6 +87,7 @@ public class ChatController {
     }
 
 
+    @Async(value = "asyncThreadPool")
     @GetMapping("/chat/{userId}")
     public ResponseEntity<ResponseDTO> findAllMessage(@PathVariable Integer userId){
 
@@ -93,6 +99,7 @@ public class ChatController {
                                 .build());
     }
 
+    @Async(value = "asyncThreadPool")
     @GetMapping("/chat/room/{roomId}")
     public ResponseEntity<ResponseDTO> findAllMessageByRoomAndCreateDate(@PathVariable Integer roomId){
         return ResponseEntity.ok()

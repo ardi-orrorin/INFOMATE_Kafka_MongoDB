@@ -8,6 +8,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.annotation.Collation;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.List;
 @Document(collection = "test2")
 public class Message {
 
-    @Id
+    @MongoId
     private ObjectId id;
 
     @Field(name = "sender")
