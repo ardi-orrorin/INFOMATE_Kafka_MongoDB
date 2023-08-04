@@ -1,11 +1,7 @@
 package com.infomate.chat.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.*;
 import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.core.annotation.Collation;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.MongoId;
@@ -14,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 
-//@Collation(value = "test1")
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
