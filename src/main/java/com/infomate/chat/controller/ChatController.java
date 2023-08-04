@@ -25,6 +25,7 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.function.BiConsumer;
 
 @RestController
@@ -86,27 +87,23 @@ public class ChatController {
         );
     }
 
-
-    @Async(value = "asyncThreadPool")
     @GetMapping("/chat/{userId}")
-    public ResponseEntity<ResponseDTO> findAllMessage(@PathVariable Integer userId){
-
-        return ResponseEntity.ok()
-                .body(ResponseDTO.builder()
-                                .statusCode(HttpStatus.OK.value())
-                                .message("success")
-                                .data(chatService.findAllMessage(userId))
-                                .build());
-    }
-
-    @Async(value = "asyncThreadPool")
-    @GetMapping("/chat/room/{roomId}")
-    public ResponseEntity<ResponseDTO> findAllMessageByRoomAndCreateDate(@PathVariable Integer roomId){
+    public ResponseEntity<ResponseDTO> findAllMessage(@PathVariable Integer userId) throws InterruptedException, ExecutionException {
         return ResponseEntity.ok()
                 .body(ResponseDTO.builder()
                         .statusCode(HttpStatus.OK.value())
                         .message("success")
-                        .data(chatService.findAllMessageByRoom(roomId))
+                        .data(chatService.findAllMessage(userId).get())
+                        .build());
+    }
+
+    @GetMapping("/chat/room/{roomId}")
+    public ResponseEntity<ResponseDTO> findAllMessageByRoomAndCreateDate(@PathVariable Integer roomId) throws ExecutionException, InterruptedException {
+        return ResponseEntity.ok()
+                .body(ResponseDTO.builder()
+                        .statusCode(HttpStatus.OK.value())
+                        .message("success")
+                        .data(chatService.findAllMessageByRoom(roomId).get())
                         .build());
     }
 }

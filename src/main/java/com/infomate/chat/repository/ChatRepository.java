@@ -1,8 +1,6 @@
 package com.infomate.chat.repository;
 
 import com.infomate.chat.entity.Message;
-import com.mongodb.client.model.Sorts;
-import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
