@@ -40,6 +40,11 @@ public class KafkaConfig{
     }
 
     @Bean
+    public NewTopic myTopic2(){
+        return new NewTopic("topic02", 2,(short) 2);
+    }
+
+    @Bean
     public ProducerFactory<String, MessageDTO> producerFactory(){
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);

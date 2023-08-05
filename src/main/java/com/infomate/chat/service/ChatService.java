@@ -37,12 +37,18 @@ public class ChatService {
         log.info("[ChatService](insertMessage) message : {}", messageEntity);
     }
 
-    @Async(value = "asyncThreadPool")
-    public CompletableFuture<List<MessageDTO>> findAllMessage(Integer userId) throws InterruptedException {
+//    @Async(value = "asyncThreadPool")
+//    public CompletableFuture<List<MessageDTO>> findAllMessage(Integer userId) throws InterruptedException {
+//
+//        List<Message> messageList = chatRepository.findAllByReceiveListContaining(Arrays.asList(userId), Sort.by(Sort.Direction.DESC, "createDate"));
+//
+//        return CompletableFuture.completedFuture(messageList.stream().map(message -> modelMapper.map(message, MessageDTO.class)).collect(Collectors.toList()));
+//    }
+    public List<Message> findAllMessage(Integer userId) {
 
         List<Message> messageList = chatRepository.findAllByReceiveListContaining(Arrays.asList(userId), Sort.by(Sort.Direction.DESC, "createDate"));
 
-        return CompletableFuture.completedFuture(messageList.stream().map(message -> modelMapper.map(message, MessageDTO.class)).collect(Collectors.toList()));
+        return messageList;
     }
 
     @Async(value = "asyncThreadPool")
