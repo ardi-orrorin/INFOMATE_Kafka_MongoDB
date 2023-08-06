@@ -12,6 +12,7 @@ import java.time.ZonedDateTime;
 @Setter
 @ToString
 @Builder
+
 public class CalendarAlertDTO {
 
     private int memberCode;

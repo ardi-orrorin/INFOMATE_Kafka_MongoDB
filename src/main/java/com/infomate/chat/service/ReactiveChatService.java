@@ -8,8 +8,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.publisher.ParallelFlux;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,13 +25,13 @@ public class ReactiveChatService {
     public Flux<Message> findAll(Integer memberCode){
 
         Flux<Message> messageList =
-                reactiveChatRepository.findAllByReceiveListContaining(Arrays.asList(memberCode), Sort.by(Sort.Direction.DESC, "createDate"));
+                reactiveChatRepository.findAllByReceiveListContaining(Mono.just(memberCode), Sort.by(Sort.Direction.DESC, "createDate"));
 
 //        return messageList.map(messages -> messages.stream()
 //                .map(message -> modelMapper.map(message, MessageDTO.class))
 //                .collect(Collectors.toList()));
 
-        return messageList;
+        return messageList.parallel(10).sequential();
     }
 
 

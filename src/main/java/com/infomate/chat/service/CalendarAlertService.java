@@ -25,19 +25,21 @@ public class CalendarAlertService {
     private final ModelMapper modelMapper;
 
     public List<CalendarAlertDTO> findSchedule(LocalDateTime localDateTime) {
-//        log.info("[CalendarAlertService](findSchedule) ZoneDateTime: {}",localDateTime.plusMinutes(30).atZone(ZoneId.of("UTC")));
+        log.info("[CalendarAlertService](findSchedule) localDateTime: {}",localDateTime);
+
         List<CalendarAlert> calendarAlertList =
                 calendarAlertRepository.findAllByEndDateBetween(
                         localDateTime,
                         localDateTime.plusMinutes(2).withSecond(0).withNano(999)
                 );
-//        List<CalendarAlert> calendarAlertList = calendarAlertRepository.findAll();
+
+        log.info("[CalendarAlertService](findSchedule) calendarAlertList: {}",calendarAlertList);
 
         if(calendarAlertList.size() == 0) return null;
 
         return calendarAlertList.stream()
                 .map(calendarAlert -> modelMapper.map(calendarAlert, CalendarAlertDTO.class))
-                .collect(Collectors.toList());
+                .toList();
 
     }
 
@@ -52,5 +54,15 @@ public class CalendarAlertService {
         calendarAlertRepository.save(calendarAlert);
 
         return true;
+    }
+
+    public void deleteScheduleList(List<CalendarAlertDTO> calendarAlertList) {
+
+     List<CalendarAlert> calendarAlertListEntity =
+             calendarAlertList.stream()
+                     .map(calendarAlertDTO -> modelMapper.map(calendarAlertDTO, CalendarAlert.class))
+                     .toList();
+
+        calendarAlertRepository.deleteAll(calendarAlertListEntity);
     }
 }
