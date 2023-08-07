@@ -1,7 +1,11 @@
 server:
-  port: 9090
+  port: 9091
+  http2:
+    enabled: true
 
 spring:
+  webflux:
+    base-path:
   data:
     mongodb:
       host: localhost
@@ -17,8 +21,6 @@ spring:
       group-id: topic01
 
 logging:
-  pattern:
-    console: "%d{HH:mm:ss.SSS} [%thread] %-5level- %msg%n"
   level:
     org:
       springframework:

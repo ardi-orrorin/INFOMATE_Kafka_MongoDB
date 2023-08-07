@@ -20,10 +20,13 @@
 3. WebSocket-STOMP
 4. Language : Java
 
-### 2. Server Diagram
+### 2.  Chatting Server Logic Diagram
 
 ![diagram](./src/main/resources/static/logo/diagram.jpg)
 
+### 3. Calendar Notification Server Logic Diagram
+
+![diagram](./src/main/resources/static/logo/calendarNotification.jpg)
 
 
 

@@ -37,16 +37,12 @@ public class ChatService {
         log.info("[ChatService](insertMessage) message : {}", messageEntity);
     }
 
-//    @Async(value = "asyncThreadPool")
-//    public CompletableFuture<List<MessageDTO>> findAllMessage(Integer userId) throws InterruptedException {
-//
-//        List<Message> messageList = chatRepository.findAllByReceiveListContaining(Arrays.asList(userId), Sort.by(Sort.Direction.DESC, "createDate"));
-//
-//        return CompletableFuture.completedFuture(messageList.stream().map(message -> modelMapper.map(message, MessageDTO.class)).collect(Collectors.toList()));
 //    }
     public List<Message> findAllMessage(Integer userId) {
 
-        List<Message> messageList = chatRepository.findAllByReceiveListContaining(Arrays.asList(userId), Sort.by(Sort.Direction.DESC, "createDate"));
+        List<Message> messageList =
+
+                chatRepository.findAllByReceiveListContaining(Arrays.asList(userId), Sort.by(Sort.Direction.DESC, "createDate"));
 
         return messageList;
     }
@@ -59,5 +55,9 @@ public class ChatService {
         List<Message> messageList =
                 chatRepository.findAllByChatRoomNoAndCreateDateBetween(roomId, beforDate, afterDate);
         return CompletableFuture.completedFuture(messageList.stream().map(message -> modelMapper.map(message, MessageDTO.class)).collect(Collectors.toList()));
+    }
+
+    public Message findMessage(Integer userId) {
+        return chatRepository.findFirstByReceiveListContaining(userId);
     }
 }
