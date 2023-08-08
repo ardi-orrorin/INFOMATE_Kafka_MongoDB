@@ -1,23 +1,19 @@
 package com.infomate.chat.service;
 
 import com.infomate.chat.dto.MessageDTO;
-import com.infomate.chat.entity.Message;
+import com.infomate.chat.entity.Chat;
 import com.infomate.chat.repository.ChatRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,21 +28,21 @@ public class ChatService {
     public void insertMessage(MessageDTO message) {
         log.info("[ChatService](insertMessage) message : {}", message);
 
-        Message messageEntity = modelMapper.map(message, Message.class);
+        Chat messageEntity = modelMapper.map(message, Chat.class);
         log.info("[ChatService](insertMessage) message : {}", messageEntity);
 
         chatRepository.save(messageEntity);
     }
 
-    public List<Message> findMessageByDay(Integer roomNo, Integer memberCode, LocalDate day) {
+    public Flux<Chat> findMessageByDay(Mono<Integer> roomNo, Mono<Integer> memberCode, Mono<LocalDate> day) {
 
-        List<Message> messageList =
+        Flux<Chat> messageList =
                 chatRepository.findAllByReceiveListContainingAndChatRoomNoAndCreateDateBetween(
-                        Arrays.asList(memberCode),
+                        memberCode,
                         roomNo,
-                        Sort.by(Sort.Direction.ASC, "createDate"),
-                        day.atTime(LocalTime.MAX),
-                        day.atTime(LocalTime.MIN)
+                        Mono.just(Sort.by(Sort.Direction.ASC, "createDate")),
+                        day.map(days -> days.atTime(LocalTime.MAX)),
+                        day.map(days -> days.atTime(LocalTime.MIN))
                 );
 
         log.info("[ChatService](findMessageByDay) messageList : {}", messageList);
@@ -54,14 +50,14 @@ public class ChatService {
         return messageList;
     }
 
-    @Async(value = "asyncThreadPool")
-    public CompletableFuture<List<MessageDTO>> findAllMessageByRoom(Integer roomId) {
-        System.out.println("LocalTime.MIN = " + LocalTime.MIN);
-        LocalDateTime beforDate = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
-        LocalDateTime afterDate = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
-        List<Message> messageList =
-                chatRepository.findAllByChatRoomNoAndCreateDateBetween(roomId, beforDate, afterDate);
-        return CompletableFuture.completedFuture(messageList.stream().map(message -> modelMapper.map(message, MessageDTO.class)).collect(Collectors.toList()));
-    }
+//    @Async(value = "asyncThreadPool")
+//    public CompletableFuture<List<MessageDTO>> findAllMessageByRoom(Integer roomId) {
+//        System.out.println("LocalTime.MIN = " + LocalTime.MIN);
+//        LocalDateTime beforDate = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
+//        LocalDateTime afterDate = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
+//        Flux<Message> messageList =
+//                chatRepository.findAllByChatRoomNoAndCreateDateBetween(roomId, beforDate, afterDate);
+//        return CompletableFuture.completedFuture(messageList.stream().map(message -> modelMapper.map(message, MessageDTO.class)).collect(Collectors.toList()));
+//    }
 
 }

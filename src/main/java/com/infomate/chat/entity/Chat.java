@@ -16,7 +16,7 @@ import java.util.List;
 @Getter
 @ToString
 @Document(collection = "test2")
-public class Message {
+public class Chat {
 
     @MongoId
     private ObjectId id;

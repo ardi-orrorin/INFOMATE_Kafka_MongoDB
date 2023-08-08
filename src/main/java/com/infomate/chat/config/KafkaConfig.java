@@ -34,10 +34,10 @@ public class KafkaConfig{
         return new KafkaAdmin(configs);
     }
 
-//    @Bean
-//    public NewTopic myTopic1(){
-//        return new NewTopic("topic01", 2,(short) 2);
-//    }
+    @Bean
+    public NewTopic myTopic1(){
+        return new NewTopic("topic01", 2,(short) 2);
+    }
 //
 //    @Bean
 //    public NewTopic myTopic2(){

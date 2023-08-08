@@ -7,6 +7,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,17 +30,17 @@ public class SchedulerService {
         LocalDateTime currentTime = LocalDateTime.now().withNano(0);
         log.info("[SchedulerService](calendarAlert) currentTime : {}", currentTime);
 
-        List<CalendarAlertDTO> calendarAlertList =
+        Flux<CalendarAlertDTO> calendarAlertList =
                 calendarAlertService.findSchedule(currentTime);
 
         log.info("[SchedulerService](calendarAlert) calendarAlertList : {}", calendarAlertList);
 
         if(calendarAlertList == null) return ;
 
-        calendarAlertList.forEach(calendarAlertDTO -> {
-
+        calendarAlertList.map(calendarAlertDTO -> {
             log.info("[SchedulerService](calendarAlert) calendarAlertDTO : {}", calendarAlertDTO);
             simpMessageSendingOperations.convertAndSend("/sub/calendar/alert/"+calendarAlertDTO.getMemberCode() , calendarAlertDTO);
+            return calendarAlertDTO;
         });
 
         calendarAlertService.deleteScheduleList(calendarAlertList);

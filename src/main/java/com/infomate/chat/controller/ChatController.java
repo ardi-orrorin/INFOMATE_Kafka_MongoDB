@@ -1,12 +1,12 @@
 package com.infomate.chat.controller;
 
 import com.infomate.chat.dto.MessageDTO;
-import com.infomate.chat.entity.Message;
+import com.infomate.chat.entity.Chat;
+import com.infomate.chat.service.ApprovalService;
 import com.infomate.chat.service.ChatService;
 import com.infomate.chat.common.ResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.http.HttpStatus;
@@ -23,12 +23,12 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.function.BiConsumer;
 
 @RestController
@@ -38,13 +38,11 @@ import java.util.function.BiConsumer;
 @EnableAsync
 public class ChatController {
 
+    private final ChatService chatService;
+
     private final KafkaTemplate<String , MessageDTO> kafkaTemplate;
 
-    //    private final NewTopi/c myTopic1;
-
     private final SimpMessageSendingOperations simpMessageSendingOperations;
-
-    private final ChatService chatService;
 
     @Async(value = "asyncThreadPool")
     @EventListener
@@ -85,22 +83,20 @@ public class ChatController {
     public void publisher(@Payload MessageDTO message){
         log.info("[ChatController](publisher) receiver : {}", message);
 
-        message.getReceiveList().forEach(member -> {
-                    log.info("[ChatController](publisher)  member : {}",member);
-                    if (member != message.getSender()) {
-                        simpMessageSendingOperations.convertAndSend("/sub/chat/" + member, message);
-                    }
-                }
-        );
+//        message.getReceiveList().forEach(member -> {
+//                    log.info("[ChatController](publisher)  member : {}",member);
+//                    if (member != message.getSender()) {
+//                        simpMessageSendingOperations.convertAndSend("/sub/chat/" + member, message);
+//                    }
+//                }
+//        );
     }
 
 
-
-
     @GetMapping("/chat/{roomNo}/{memberCode}/{day}")
-    public List<Message> findAllMessage(@PathVariable Integer roomNo,
-                                       @PathVariable Integer memberCode,
-                                       @PathVariable LocalDate day){
+    public Flux<Chat> findAllMessage(@PathVariable Mono<Integer> roomNo,
+                                     @PathVariable Mono<Integer> memberCode,
+                                     @PathVariable Mono<LocalDate> day){
 
         log.info("[ChatController](findAllMessage) : roomNo : {} ", roomNo);
         log.info("[ChatController](findAllMessage) : memberCode : {} ", memberCode);

@@ -7,12 +7,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -24,10 +23,10 @@ public class CalendarAlertService {
 
     private final ModelMapper modelMapper;
 
-    public List<CalendarAlertDTO> findSchedule(LocalDateTime localDateTime) {
+    public Flux<CalendarAlertDTO> findSchedule(LocalDateTime localDateTime) {
         log.info("[CalendarAlertService](findSchedule) localDateTime: {}",localDateTime);
 
-        List<CalendarAlert> calendarAlertList =
+        Flux<CalendarAlert> calendarAlertList =
                 calendarAlertRepository.findAllByEndDateBetween(
                         localDateTime,
                         localDateTime.plusMinutes(2).withSecond(0).withNano(999)
@@ -35,15 +34,15 @@ public class CalendarAlertService {
 
         log.info("[CalendarAlertService](findSchedule) calendarAlertList: {}",calendarAlertList);
 
-        if(calendarAlertList.size() == 0) return null;
+        if(calendarAlertList.next() == null) return null;
 
-        return calendarAlertList.stream()
-                .map(calendarAlert -> modelMapper.map(calendarAlert, CalendarAlertDTO.class))
-                .toList();
+        return calendarAlertList.map(calendarAlert ->
+                modelMapper.map(calendarAlert, CalendarAlertDTO.class));
 
     }
 
-    public boolean insertCalendarAlert(CalendarAlertDTO calendarAlertDTO) {
+    @Transactional
+    public boolean insertCalendarAlert(Mono<CalendarAlertDTO> calendarAlertDTO) {
 
         log.info("[CalendarAlertService](insertCalendarAlert) calendarAlertDTO: {}",calendarAlertDTO);
 
@@ -56,12 +55,12 @@ public class CalendarAlertService {
         return true;
     }
 
-    public void deleteScheduleList(List<CalendarAlertDTO> calendarAlertList) {
+    @Transactional
+    public void deleteScheduleList(Flux<CalendarAlertDTO> calendarAlertList) {
 
-     List<CalendarAlert> calendarAlertListEntity =
-             calendarAlertList.stream()
-                     .map(calendarAlertDTO -> modelMapper.map(calendarAlertDTO, CalendarAlert.class))
-                     .toList();
+     Flux<CalendarAlert> calendarAlertListEntity =
+             calendarAlertList.map(calendarAlertDTO ->
+                             modelMapper.map(calendarAlertDTO, CalendarAlert.class));
 
         calendarAlertRepository.deleteAll(calendarAlertListEntity);
     }

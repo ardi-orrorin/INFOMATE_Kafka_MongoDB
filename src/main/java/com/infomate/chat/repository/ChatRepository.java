@@ -1,18 +1,20 @@
 package com.infomate.chat.repository;
 
-import com.infomate.chat.entity.Message;
+import com.infomate.chat.entity.Chat;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
-public interface ChatRepository extends MongoRepository<Message, ObjectId> {
+public interface ChatRepository extends ReactiveMongoRepository<Chat, ObjectId> {
 
 
-    List<Message> findAllByReceiveListContainingAndChatRoomNoAndCreateDateBetween(List<Integer> receiveList, int RoomNo, Sort sort, LocalDateTime startDate, LocalDateTime endDate);
+    Flux<Chat> findAllByReceiveListContainingAndChatRoomNoAndCreateDateBetween(
+            Mono<Integer> receiver, Mono<Integer> RoomNo,
+            Mono<Sort> sort, Mono<LocalDateTime> startDate, Mono<LocalDateTime> endDate);
 
-    List<Message> findAllByChatRoomNoAndCreateDateBetween(Integer roomId, LocalDateTime beforeDate, LocalDateTime afterDate);
+    Flux<Chat> findAllByChatRoomNoAndCreateDateBetween(Integer roomId, LocalDateTime beforeDate, LocalDateTime afterDate);
 }

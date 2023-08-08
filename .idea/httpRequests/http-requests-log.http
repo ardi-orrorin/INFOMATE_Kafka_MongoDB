@@ -1,3 +1,165 @@
+POST http://localhost:9091/approval/insert
+Content-Type: application/json
+Content-Length: 97
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "receiver": 123,
+  "sender": 1,
+  "subject": "body subject",
+  "url": "host:port/test/test"
+}
+
+###
+
+POST http://localhost:9091/approval/insert
+Content-Type: application/json
+Content-Length: 97
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "receiver": 123,
+  "sender": 1,
+  "subject": "body subject",
+  "url": "host:port/test/test"
+}
+
+###
+
+POST http://localhost:9091/approval/insert
+Content-Type: application/json
+Content-Length: 97
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "receiver": 123,
+  "sender": 1,
+  "subject": "body subject",
+  "url": "host:port/test/test"
+}
+
+###
+
+POST http://localhost:9091/approval/insert
+Content-Type: application/json
+Content-Length: 97
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "receiver": 123,
+  "sender": 1,
+  "subject": "body subject",
+  "url": "host:port/test/test"
+}
+
+###
+
+POST http://localhost:9091/approval/insert
+Content-Type: application/json
+Content-Length: 97
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "receiver": 123,
+  "sender": 1,
+  "subject": "body subject",
+  "url": "host:port/test/test"
+}
+
+###
+
+POST http://localhost:9091/approval/insert
+Content-Type: application/json
+Content-Length: 97
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "receiver": 123,
+  "sender": 1,
+  "subject": "body subject",
+  "url": "host:port/test/test"
+}
+
+###
+
+POST http://localhost:9091/approval/insert
+Content-Type: application/json
+Content-Length: 97
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "receiver": 123,
+  "sender": 1,
+  "subject": "body subject",
+  "url": "host:port/test/test"
+}
+
+###
+
+POST http://localhost:9091/approval/insert
+Content-Type: application/json
+Content-Length: 97
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "receiver": 123,
+  "sender": 1,
+  "subject": "body subject",
+  "url": "host:port/test/test"
+}
+
+###
+
+POST http://localhost:9091/approval/insert
+Content-Type: application/json
+Content-Length: 97
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "receiver": 123,
+  "sender": 1,
+  "subject": "body subject",
+  "url": "host:port/test/test"
+}
+
+###
+
+POST http://localhost:9091/approval/insert
+Content-Type: application/json
+Content-Length: 97
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "receiver": 123,
+  "sender": 1,
+  "subject": "body subject",
+  "url": "host:port/test/test"
+}
+
+<> 2023-08-08T172106.500.json
+
+###
+
 GET http://localhost:9090/reactivechat/1
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
@@ -741,196 +903,6 @@ Accept-Encoding: br,deflate,gzip,x-gzip
   "calendarName": "캘린더 제목1",
   "scheduleTitle": "스케쥴 제목1",
   "endDate": "2023-08-05T20:34:00",
-  "important": true
-}
-
-###
-
-POST http://localhost:9090/calendar/alert
-Content-Type: application/json
-Accept: */*
-Content-Length: 177
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "memberCode": 2,
-  "scheduleId": 27,
-  "calendarName": "캘린더 제목1",
-  "scheduleTitle": "스케쥴 제목1",
-  "endDate": "2023-08-05T20:34:00",
-  "important": true
-}
-
-###
-
-POST http://localhost:9090/calendar/alert
-Content-Type: application/json
-Accept: */*
-Content-Length: 177
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "memberCode": 2,
-  "scheduleId": 27,
-  "calendarName": "캘린더 제목1",
-  "scheduleTitle": "스케쥴 제목1",
-  "endDate": "2023-08-05T20:34:00",
-  "important": true
-}
-
-###
-
-POST http://localhost:9090/calendar/alert
-Content-Type: application/json
-Accept: */*
-Content-Length: 177
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "memberCode": 2,
-  "scheduleId": 27,
-  "calendarName": "캘린더 제목1",
-  "scheduleTitle": "스케쥴 제목1",
-  "endDate": "2023-08-05T20:34:00",
-  "important": true
-}
-
-###
-
-POST http://localhost:9090/calendar/alert
-Content-Type: application/json
-Accept: */*
-Content-Length: 177
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "memberCode": 2,
-  "scheduleId": 27,
-  "calendarName": "캘린더 제목1",
-  "scheduleTitle": "스케쥴 제목1",
-  "endDate": "2023-08-05T20:34:00",
-  "important": true
-}
-
-###
-
-POST http://localhost:9090/calendar/alert
-Content-Type: application/json
-Accept: */*
-Content-Length: 177
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "memberCode": 2,
-  "scheduleId": 27,
-  "calendarName": "캘린더 제목1",
-  "scheduleTitle": "스케쥴 제목1",
-  "endDate": "2023-08-05T20:34:00",
-  "important": true
-}
-
-###
-
-POST http://localhost:9090/calendar/alert
-Content-Type: application/json
-Accept: */*
-Content-Length: 177
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "memberCode": 2,
-  "scheduleId": 27,
-  "calendarName": "캘린더 제목1",
-  "scheduleTitle": "스케쥴 제목1",
-  "endDate": "2023-08-05T20:34:00",
-  "important": true
-}
-
-###
-
-POST http://localhost:9090/calendar/alert
-Content-Type: application/json
-Accept: */*
-Content-Length: 177
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "memberCode": 2,
-  "scheduleId": 27,
-  "calendarName": "캘린더 제목1",
-  "scheduleTitle": "스케쥴 제목1",
-  "endDate": "2023-08-05T20:34:00",
-  "important": true
-}
-
-###
-
-POST http://localhost:9090/calendar/alert
-Content-Type: application/json
-Accept: */*
-Content-Length: 177
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "memberCode": 2,
-  "scheduleId": 27,
-  "calendarName": "캘린더 제목1",
-  "scheduleTitle": "스케쥴 제목1",
-  "endDate": "2023-08-05T20:33:00",
-  "important": true
-}
-
-###
-
-POST http://localhost:9090/calendar/alert
-Content-Type: application/json
-Accept: */*
-Content-Length: 177
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "memberCode": 2,
-  "scheduleId": 27,
-  "calendarName": "캘린더 제목1",
-  "scheduleTitle": "스케쥴 제목1",
-  "endDate": "2023-08-05T20:33:00",
-  "important": true
-}
-
-###
-
-POST http://localhost:9090/calendar/alert
-Content-Type: application/json
-Accept: */*
-Content-Length: 177
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "memberCode": 2,
-  "scheduleId": 27,
-  "calendarName": "캘린더 제목1",
-  "scheduleTitle": "스케쥴 제목1",
-  "endDate": "2023-08-05T20:30:00",
   "important": true
 }
 
