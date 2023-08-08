@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.context.event.EventListener;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +23,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
-//import reactor.core.publisher.Flux;
-//import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -41,25 +39,24 @@ import java.util.function.BiConsumer;
 public class ChatController {
 
     private final KafkaTemplate<String , MessageDTO> kafkaTemplate;
-    private final NewTopic myTopic1;
 
+    //    private final NewTopi/c myTopic1;
 
     private final SimpMessageSendingOperations simpMessageSendingOperations;
 
     private final ChatService chatService;
 
-
     @Async(value = "asyncThreadPool")
     @EventListener
     public void webSocketConnect(SessionConnectEvent event){
 
-        System.out.println("event = " + event);
+        log.info("[ChatController](webSocketConnect) event : {}", event);
     }
 
     @Async(value = "asyncThreadPool")
     @EventListener
     public void webSocketDisConnect(SessionDisconnectEvent event){
-        System.out.println("event = " + event);
+        log.info("[ChatController](webSocketDisConnect) event : {}", event);
     }
 
     @Async(value = "asyncThreadPool")
@@ -69,15 +66,16 @@ public class ChatController {
         log.info("[ChatController](subScriber) message : {}", message);
 
         message.setCreateDate(LocalDateTime.now());
+
         CompletableFuture<SendResult<String, MessageDTO>> future =
-                kafkaTemplate.send(myTopic1.name(), message);
+                kafkaTemplate.send("topic01", message);
         future.whenComplete(new BiConsumer<SendResult<String, MessageDTO>, Throwable>() {
             @Override
             public void accept(SendResult<String, MessageDTO> stringMessageDTOSendResult, Throwable throwable) {
                 log.info("[ChatController](subScriber) message : {}", message);
                 log.info("[ChatController](subScriber) 메세지 전송 성공");
 
-//                chatService.insertMessage(message);
+                chatService.insertMessage(message);
             }
         });
     }
@@ -86,6 +84,7 @@ public class ChatController {
     @KafkaListener(topics = "topic01", groupId = "foo")
     public void publisher(@Payload MessageDTO message){
         log.info("[ChatController](publisher) receiver : {}", message);
+
         message.getReceiveList().forEach(member -> {
                     log.info("[ChatController](publisher)  member : {}",member);
                     if (member != message.getSender()) {
@@ -95,14 +94,23 @@ public class ChatController {
         );
     }
 
-    @GetMapping("/chat/{userId}")
-    public Message findAllMessage(@PathVariable Integer userId){
-        return chatService.findMessage(userId);
 
+
+
+    @GetMapping("/chat/{roomNo}/{memberCode}/{day}")
+    public List<Message> findAllMessage(@PathVariable Integer roomNo,
+                                       @PathVariable Integer memberCode,
+                                       @PathVariable LocalDate day){
+
+        log.info("[ChatController](findAllMessage) : roomNo : {} ", roomNo);
+        log.info("[ChatController](findAllMessage) : memberCode : {} ", memberCode);
+        log.info("[ChatController](findAllMessage) : day : {} ", day);
+
+        return chatService.findMessageByDay(roomNo, memberCode, day);
     }
 
     @GetMapping("/chat/room/{roomId}")
-    public ResponseEntity<ResponseDTO> findAllMessageByRoomAndCreateDate(@PathVariable Integer roomId) throws ExecutionException, InterruptedException {
+    public ResponseEntity<ResponseDTO> findAllMessageByRoomAndCreateDate(@PathVariable Integer roomId)  {
         return ResponseEntity.ok()
                 .body(ResponseDTO.builder()
                         .statusCode(HttpStatus.OK.value())

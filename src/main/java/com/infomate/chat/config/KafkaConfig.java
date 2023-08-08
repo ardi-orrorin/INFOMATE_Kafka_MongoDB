@@ -34,15 +34,15 @@ public class KafkaConfig{
         return new KafkaAdmin(configs);
     }
 
-    @Bean
-    public NewTopic myTopic1(){
-        return new NewTopic("topic01", 2,(short) 2);
-    }
-
-    @Bean
-    public NewTopic myTopic2(){
-        return new NewTopic("topic02", 2,(short) 2);
-    }
+//    @Bean
+//    public NewTopic myTopic1(){
+//        return new NewTopic("topic01", 2,(short) 2);
+//    }
+//
+//    @Bean
+//    public NewTopic myTopic2(){
+//        return new NewTopic("topic02", 2,(short) 2);
+//    }
 
     @Bean
     public ProducerFactory<String, MessageDTO> producerFactory(){
@@ -66,7 +66,7 @@ public class KafkaConfig{
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "foo"); // 이유 모름
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        props.put(JsonDeserializer.TYPE_MAPPINGS, "MessageDTO:com.infomate.chat.dto.MessageDTO"); // json역직렬화 매핑
+        props.put(JsonDeserializer .TYPE_MAPPINGS, "MessageDTO:com.infomate.chat.dto.MessageDTO"); // json역직렬화 매핑
         return new DefaultKafkaConsumerFactory<>(props);
     }
 

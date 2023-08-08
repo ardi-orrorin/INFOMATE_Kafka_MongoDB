@@ -4,7 +4,6 @@ package com.infomate.chat.dto;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor

@@ -31,18 +31,25 @@ public class ChatService {
     @Transactional
     public void insertMessage(MessageDTO message) {
         log.info("[ChatService](insertMessage) message : {}", message);
+
         Message messageEntity = modelMapper.map(message, Message.class);
         log.info("[ChatService](insertMessage) message : {}", messageEntity);
+
         chatRepository.save(messageEntity);
-        log.info("[ChatService](insertMessage) message : {}", messageEntity);
     }
 
-//    }
-    public List<Message> findAllMessage(Integer userId) {
+    public List<Message> findMessageByDay(Integer roomNo, Integer memberCode, LocalDate day) {
 
         List<Message> messageList =
+                chatRepository.findAllByReceiveListContainingAndChatRoomNoAndCreateDateBetween(
+                        Arrays.asList(memberCode),
+                        roomNo,
+                        Sort.by(Sort.Direction.ASC, "createDate"),
+                        day.atTime(LocalTime.MAX),
+                        day.atTime(LocalTime.MIN)
+                );
 
-                chatRepository.findAllByReceiveListContaining(Arrays.asList(userId), Sort.by(Sort.Direction.DESC, "createDate"));
+        log.info("[ChatService](findMessageByDay) messageList : {}", messageList);
 
         return messageList;
     }
@@ -57,7 +64,4 @@ public class ChatService {
         return CompletableFuture.completedFuture(messageList.stream().map(message -> modelMapper.map(message, MessageDTO.class)).collect(Collectors.toList()));
     }
 
-    public Message findMessage(Integer userId) {
-        return chatRepository.findFirstByReceiveListContaining(userId);
-    }
 }
