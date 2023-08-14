@@ -56,7 +56,6 @@ public class ApprovalController {
                         log.info("[ApprovalController](insertApprovalAlert) message : {}", approvalDTO);
                         log.info("[ApprovalController](insertApprovalAlert) 메세지 전송 성공");
 
-
                     }
                 })
         );
@@ -72,8 +71,10 @@ public class ApprovalController {
     public void publisher(@Payload MessageDTO messageDTO){
         log.info("[ApprovalController](publisher) messageDTO : {}", messageDTO);
 
-        messageDTO.getReceiveList().forEach(receiver ->
-                simpMessageSendingOperations.convertAndSend("/sub/approval/" + receiver, messageDTO)
+        messageDTO.getReceiveList().forEach(receiver -> {
+                    log.info("[ApprovalController](publisher) receiver : {}", receiver);
+                    simpMessageSendingOperations.convertAndSend("/sub/approval/" + receiver, messageDTO);
+                }
         );
 
 

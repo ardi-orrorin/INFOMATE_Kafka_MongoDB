@@ -21,10 +21,10 @@ public class CalendarAlertController {
     private final CalendarAlertService calendarAlertService;
 
     @PostMapping("/alert")
-    public ResponseEntity<?> insertCalendarAlert(@RequestBody Mono<CalendarAlertDTO> calendarAlertDTO){
+    public ResponseEntity<?> insertCalendarAlert(@RequestBody CalendarAlertDTO calendarAlertDTO){
         log.info("[CalendarAlertController](insertCalendarAlert) calendarAlertDTO : {}", calendarAlertDTO);
 
-        boolean result = calendarAlertService.insertCalendarAlert(calendarAlertDTO);
+        boolean result = calendarAlertService.insertCalendarAlert(Mono.just(calendarAlertDTO));
 
         log.info("[CalendarAlertController](insertCalendarAlert) result : {}", result);
 

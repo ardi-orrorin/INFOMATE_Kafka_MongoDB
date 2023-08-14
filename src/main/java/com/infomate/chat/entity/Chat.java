@@ -2,6 +2,7 @@ package com.infomate.chat.entity;
 
 import lombok.*;
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.MongoId;
@@ -30,6 +31,7 @@ public class Chat {
     @Field(name = "receiveList")
     private List<Integer> receiveList;
 
+//    @CreatedDate
     @Field(name = "createDate")
     private LocalDateTime createDate;
 

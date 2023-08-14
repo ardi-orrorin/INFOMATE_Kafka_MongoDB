@@ -28,10 +28,14 @@ public class ChatService {
     public void insertMessage(MessageDTO message) {
         log.info("[ChatService](insertMessage) message : {}", message);
 
-        Chat messageEntity = modelMapper.map(message, Chat.class);
-        log.info("[ChatService](insertMessage) message : {}", messageEntity);
+        Chat chatEntity = modelMapper.map(message, Chat.class);
 
-        chatRepository.save(messageEntity);
+        log.info("[ChatService](insertMessage) chatEntity : {}", chatEntity);
+
+        Mono<Chat> chatMono = chatRepository.insert(chatEntity);
+        chatMono.subscribe(e->
+                log.info("[ChatService](insertMessage) chatMono : {}", e));
+
     }
 
     public Flux<Chat> findMessageByDay(Mono<Integer> roomNo, Mono<Integer> memberCode, Mono<LocalDate> day) {
