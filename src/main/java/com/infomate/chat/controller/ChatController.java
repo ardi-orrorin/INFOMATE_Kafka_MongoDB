@@ -1,5 +1,6 @@
 package com.infomate.chat.controller;
 
+import com.infomate.chat.dto.ChatDTO;
 import com.infomate.chat.dto.MessageDTO;
 import com.infomate.chat.entity.Chat;
 import com.infomate.chat.service.ChatService;
@@ -112,8 +113,16 @@ public class ChatController {
         log.info("[ChatController](findAllMessage) : memberCode : {} ", memberCode);
         log.info("[ChatController](findAllMessage) : day : {} ", day);
 
-        return chatService.findMessageByDay(Mono.just(roomNo), Mono.just(memberCode), Mono.just(day));
+//        return chatService.findMessageByDay(Mono.just(roomNo), Mono.just(memberCode), Mono.just(day));
+
+        return Flux.just(ChatDTO.builder()
+                .chatRoomNo(roomNo)
+                .sender(memberCode)
+                .createDate(day.atStartOfDay())
+                .build()).flatMap(e-> chatService.findMessageByDay(e));
     }
+
+
 
     @GetMapping("/chat/room/{roomId}")
     public ResponseEntity<ResponseDTO> findAllMessageByRoomAndCreateDate(@PathVariable Integer roomId)  {

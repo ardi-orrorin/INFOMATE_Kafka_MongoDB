@@ -15,6 +15,7 @@ import java.util.List;
 @Setter
 @Getter
 @ToString
+@Builder
 public class ChatDTO {
 
     private int sender;

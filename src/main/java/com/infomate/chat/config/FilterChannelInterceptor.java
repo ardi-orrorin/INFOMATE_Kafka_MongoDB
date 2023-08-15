@@ -33,9 +33,17 @@ public class FilterChannelInterceptor implements ChannelInterceptor {
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+
+        TokenDTO tokenDTO = null;
+
         if(accessor.getCommand() == StompCommand.CONNECT){
 
-            restTemplate.exchange(RequestEntity.post("").body(""), TokenDTO.class);
+//            tokenDTO = restTemplate
+//                    .exchange(RequestEntity.post("").body(""), TokenDTO.class)
+//                    .getBody();
+
+            log.info("[FilterChannelInterceptor](preSend) :tokenDTO : {} ",tokenDTO);
+
             //            StompHeaderAccessor 헤더 등록
         }
         log.info("[FilterChannelInterceptor](preSend) :accessor : {} ",accessor);

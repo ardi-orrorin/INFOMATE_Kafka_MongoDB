@@ -12,9 +12,15 @@ import java.time.LocalDateTime;
 public interface ChatRepository extends ReactiveMongoRepository<Chat, ObjectId> {
 
 
+//    Flux<Chat> findAllByReceiveListContainingAndChatRoomNoAndCreateDateBetween(
+//            Mono<Integer> receiver, Mono<Integer> RoomNo,
+//            Mono<Sort> sort, Mono<LocalDateTime> startDate, Mono<LocalDateTime> endDate);
     Flux<Chat> findAllByReceiveListContainingAndChatRoomNoAndCreateDateBetween(
-            Mono<Integer> receiver, Mono<Integer> RoomNo,
-            Mono<Sort> sort, Mono<LocalDateTime> startDate, Mono<LocalDateTime> endDate);
+            Integer receiver, Integer RoomNo,
+            Sort sort, LocalDateTime startDate, LocalDateTime endDate);
+    Flux<Chat> findAllBySenderAndChatRoomNo(
+            Integer receiver, Integer RoomNo,
+            Sort sort);
 
     Flux<Chat> findAllByChatRoomNoAndCreateDateBetween(Integer roomId, LocalDateTime beforeDate, LocalDateTime afterDate);
 }

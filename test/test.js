@@ -3,8 +3,8 @@ import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporte
 
 
 export default function(data) {
-    http.get('http://localhost:9090/reactivechat/2')
-    // http.get('http://localhost:9090/chat/2')
+    http.get('http://localhost:9091/chat/10/100/2023-08-15')
+    // http.get('http://localhost:9091/chat1/10/100/2023-08-15')
 
 }
 

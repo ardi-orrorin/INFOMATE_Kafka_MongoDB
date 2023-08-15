@@ -1,5 +1,6 @@
 package com.infomate.chat.service;
 
+import com.infomate.chat.dto.ChatDTO;
 import com.infomate.chat.dto.MessageDTO;
 import com.infomate.chat.entity.Chat;
 import com.infomate.chat.repository.ChatRepository;
@@ -38,20 +39,30 @@ public class ChatService {
 
     }
 
-    public Flux<Chat> findMessageByDay(Mono<Integer> roomNo, Mono<Integer> memberCode, Mono<LocalDate> day) {
+//    public Flux<Chat> findMessageByDay(Mono<Integer> roomNo, Mono<Integer> memberCode, Mono<LocalDate> day) {
+    public Flux<Chat> findMessageByDay(ChatDTO chatDTO) {
 
-        Flux<Chat> messageList =
-                chatRepository.findAllByReceiveListContainingAndChatRoomNoAndCreateDateBetween(
-                        memberCode,
-                        roomNo,
-                        Mono.just(Sort.by(Sort.Direction.ASC, "createDate")),
-                        day.map(days -> days.atTime(LocalTime.MAX)),
-                        day.map(days -> days.atTime(LocalTime.MIN))
-                );
+//        Flux<Chat> messageList =
 
-        log.info("[ChatService](findMessageByDay) messageList : {}", messageList);
+//                chatRepository.findAllBySenderAndChatRoomNo(
+//                        chatDTO.getSender(),
+//                        chatDTO.getChatRoomNo(),
+//                        Sort.by(Sort.Direction.ASC, "createDate"));
+//                        chatDTO.getCreateDate().toLocalDate().atTime(LocalTime.MAX),
+//                        chatDTO.getCreateDate().toLocalDate().atTime(LocalTime.MIN)
+//                );
 
-        return messageList;
+//        log.info("[ChatService](findMessageByDay) messageList : {}", messageList);
+
+        return Flux.just(chatDTO).flatMap(e -> {
+            Flux<Chat> messageList =
+            chatRepository.findAllBySenderAndChatRoomNo(
+                    e.getSender(),
+                    e.getChatRoomNo(),
+                    Sort.by(Sort.Direction.ASC, "createDate"));
+            log.info("[ChatService](findMessageByDay) messageList : {}", messageList);
+            return messageList;
+        });
     }
 
 //    @Async(value = "asyncThreadPool")
