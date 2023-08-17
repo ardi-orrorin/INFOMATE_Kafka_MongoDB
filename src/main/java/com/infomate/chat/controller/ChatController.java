@@ -19,17 +19,13 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.messaging.support.GenericMessage;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
-import org.springframework.web.socket.messaging.StompSubProtocolHandler;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.function.BiConsumer;
@@ -72,8 +68,7 @@ public class ChatController {
         log.info("[ChatController](subScriber) message : {}", message);
 
         message.setCreateDate(LocalDateTime.now());
-        message.setHeader(simpMessageHeaderAccessor.getFirstNativeHeader("X-Authorization"));
-//        message.setCreateDate(LocalDateTime.now()); @CreateDate 테스트
+//        message.setHeader(simpMessageHeaderAccessor.getFirstNativeHeader("X-Authorization"));
 
         Mono.just(message).subscribe(messageDTO -> kafkaTemplate.send("topic01", messageDTO).whenComplete(
                 new BiConsumer<SendResult<String, MessageDTO>, Throwable>() {
@@ -115,11 +110,16 @@ public class ChatController {
 
 //        return chatService.findMessageByDay(Mono.just(roomNo), Mono.just(memberCode), Mono.just(day));
 
+
+
         return Flux.just(ChatDTO.builder()
                 .chatRoomNo(roomNo)
                 .sender(memberCode)
                 .createDate(day.atStartOfDay())
-                .build()).flatMap(e-> chatService.findMessageByDay(e));
+                .build())
+                .flatMap(e->
+                    chatService.findMessageByDay(e)
+                );
     }
 
 

@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Scheduler;
+import reactor.core.scheduler.Schedulers;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -54,12 +56,13 @@ public class ChatService {
 
 //        log.info("[ChatService](findMessageByDay) messageList : {}", messageList);
 
-        return Flux.just(chatDTO).flatMap(e -> {
-            Flux<Chat> messageList =
-            chatRepository.findAllBySenderAndChatRoomNo(
-                    e.getSender(),
-                    e.getChatRoomNo(),
-                    Sort.by(Sort.Direction.ASC, "createDate"));
+        return Flux.just(chatDTO)
+                .flatMap(e -> {
+                        Flux<Chat> messageList =
+                        chatRepository.findAllBySenderAndChatRoomNo(
+                            e.getSender(),
+                            e.getChatRoomNo(),
+                            Sort.by(Sort.Direction.ASC, "createDate"));
             log.info("[ChatService](findMessageByDay) messageList : {}", messageList);
             return messageList;
         });
