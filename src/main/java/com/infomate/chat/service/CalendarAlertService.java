@@ -32,7 +32,7 @@ public class CalendarAlertService {
                         localDateTime.plusMinutes(2).withSecond(0).withNano(999)
                 );
 
-        log.info("[CalendarAlertService](findSchedule) calendarAlertList: {}",calendarAlertList);
+        log.info("[CalendarAlertService](findSchedule) calendarAlertList: {}", calendarAlertList);
 
         if(calendarAlertList.next() == null) return null;
 
@@ -64,4 +64,24 @@ public class CalendarAlertService {
 
         calendarAlertRepository.deleteAll(calendarAlertListEntity);
     }
+
+    @Transactional
+    public void deleteSchedule(Mono<Integer> scheduleId){
+        scheduleId.subscribe(id ->
+            calendarAlertRepository.deleteByScheduleId(id)
+        );
+    }
+
+
+    @Transactional
+    public void updateCalendarAlert(Mono<CalendarAlertDTO> calendarAlertDTO) {
+        calendarAlertDTO.subscribe(schedule -> {
+            Mono<CalendarAlert> calendarAlertMono = calendarAlertRepository.findByScheduleId(schedule.getScheduleId());
+            calendarAlertMono.map(calendarAlert -> {
+                calendarAlert.update(calendarAlertDTO.block());
+                return calendarAlert;
+            });
+        });
+    }
 }
+

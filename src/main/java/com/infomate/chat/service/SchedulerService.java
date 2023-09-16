@@ -38,7 +38,7 @@ public class SchedulerService {
 
         calendarAlertList.subscribe(calendarAlertDTO -> {
             log.info("[SchedulerService](calendarAlert) calendarAlertDTO : {}", calendarAlertDTO);
-            simpMessageSendingOperations.convertAndSend("/sub/calendar/alert/"+calendarAlertDTO.getMemberCode() , calendarAlertDTO);
+            simpMessageSendingOperations.convertAndSend("/sub/calendar/alert/" + calendarAlertDTO.getMemberCode() , calendarAlertDTO);
         });
 
         calendarAlertService.deleteScheduleList(calendarAlertList);

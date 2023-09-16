@@ -5,25 +5,28 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
-@Setter
 @ToString
 @Builder
-
 public class CalendarAlertDTO {
 
-    private int memberCode;
+    private Integer memberCode;
 
-    private int scheduleId;
+    private Integer scheduleId;
 
     private String calendarName;
 
     private String scheduleTitle;
 
+    private LocalDateTime startDate;
+
     private LocalDateTime endDate;
 
+    private LocalDateTime alertDate;
+
     private Boolean important;
+
+    private Boolean allDay;
+
 
 }
