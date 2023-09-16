@@ -66,7 +66,6 @@ public class ApprovalController {
 
     }
 
-    @Async(value = "asyncThreadPool")
     @KafkaListener(topics = "topic02", groupId = "foo")
     public void publisher(@Payload MessageDTO messageDTO){
         log.info("[ApprovalController](publisher) messageDTO : {}", messageDTO);

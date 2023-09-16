@@ -1,22 +1,30 @@
 package com.infomate.chat.config;
 
+import com.infomate.chat.dto.SessionDTO;
 import com.infomate.chat.dto.TokenDTO;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.RequestEntity;
+import org.springframework.http.*;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
+import java.time.chrono.Chronology;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Configuration
@@ -28,42 +36,50 @@ public class FilterChannelInterceptor implements ChannelInterceptor {
     @Value("${server.first.host}")
     private String FIRST_SERVER;
 
-    private final RestTemplate restTemplate;
+    private Flux<TokenDTO> tokenDTOList;
+    private Mono<TokenDTO> tokenDTO;
 
-    private final List<TokenDTO> tokenDTOList;
+    private List<SessionDTO> sessionDTOList = new ArrayList<>();
 
-    public FilterChannelInterceptor(RestTemplate restTemplate, List<TokenDTO> tokenDTOList) {
-        this.restTemplate = restTemplate;
-        this.tokenDTOList = tokenDTOList;
+
+    public Mono<TokenDTO> userInfo(String jwt){
+        return WebClient.create()
+                .post().uri(FIRST_SERVER+"/api/v1/userinfo")
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .header(HttpHeaders.WWW_AUTHENTICATE, FIRST_SERVER_API)
+                .bodyValue("sdfdsf")
+                .retrieve()
+                .bodyToMono(TokenDTO.class);
     }
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
-        Optional<TokenDTO> tokenDTO = null;
-
-
         if(accessor.getCommand() == StompCommand.CONNECT){
 
-//            1. api 호출 유저 정보 확인
-//            2. tokenDTO 객체 리스트 추가
-//            3. 사용불가능한 토큰 exception 처리
+            String jwt = accessor.getNativeHeader("Authorization").get(0);
+            String sessionId = accessor.getSessionId();
+            Mono<Integer> i = WebClient.create()
+                    .get().uri(FIRST_SERVER+"/api/v1/userinfo")
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .header(HttpHeaders.WWW_AUTHENTICATE, FIRST_SERVER_API)
+                    .header("Authorization", "Bearer " + jwt)
+                    .retrieve()
+                    .bodyToMono(Integer.class);
+
+            sessionDTOList.add(new SessionDTO(i.block(), sessionId, jwt));
+//            log.info("[FilterChannelInterceptor](preSend) i : {} ",i.block());
+//            log.info("[FilterChannelInterceptor](preSend) jwt : {} ",jwt);
 
 
-//            tokenDTO = restTemplate
-//                    .exchange(RequestEntity.post("").body(""), TokenDTO.class)
-//                    .getBody();
-
-            log.info("[FilterChannelInterceptor](preSend) :tokenDTO : {} ",tokenDTO);
+            log.info("[FilterChannelInterceptor](StompCommand.CONNECT) sessionDTOList : {} ", sessionDTOList);
 
             //            StompHeaderAccessor 헤더 등록
         }
 
         if(accessor.getCommand() == StompCommand.SEND){
-            tokenDTO = tokenDTOList.stream()
-                     .filter(e-> e.getJwt().equals(accessor.getNativeHeader("")))
-                     .findFirst();
+
 
 //            1. 유효기간 만료 확인
 //            2. 만료 직전인 경우 jwt 재발생
@@ -72,12 +88,22 @@ public class FilterChannelInterceptor implements ChannelInterceptor {
         }
 
         if(accessor.getCommand() == StompCommand.DISCONNECT){
+            String sessionId = accessor.getSessionId();
+            sessionDTOList = sessionDTOList.stream().filter(sessionDTO ->
+                !sessionDTO.getSessionId().equals(sessionId)
+            ).collect(Collectors.toList());
 
+            log.info("[FilterChannelInterceptor](StompCommand.DISCONNECT) sessionDTOList : {} ", sessionDTOList);
+//
 //            1. 유저 정보 리스트 삭제
+//            tokenDTOList.filter(tokenDTO1 ->
+//                            !tokenDTO1.getSessionId().equals(accessor.getSessionId()))
+//                    .subscribe();
 
         }
 
         log.info("[FilterChannelInterceptor](preSend) :accessor : {} ",accessor);
         return message;
     }
+
 }

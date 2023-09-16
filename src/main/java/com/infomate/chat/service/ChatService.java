@@ -38,7 +38,6 @@ public class ChatService {
         Mono<Chat> chatMono = chatRepository.insert(chatEntity);
         chatMono.subscribe(e->
                 log.info("[ChatService](insertMessage) chatMono : {}", e));
-
     }
 
 //    public Flux<Chat> findMessageByDay(Mono<Integer> roomNo, Mono<Integer> memberCode, Mono<LocalDate> day) {

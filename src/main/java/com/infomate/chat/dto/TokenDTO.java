@@ -1,22 +1,20 @@
 package com.infomate.chat.dto;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 @Setter
+@Builder
 public class TokenDTO {
 
     private String jwt;
 
     private String pk;
+
+    private String sessionId;
 
     private String username;
 

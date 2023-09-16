@@ -2,14 +2,18 @@ package com.infomate.chat.controller;
 
 import com.infomate.chat.dto.ChatDTO;
 import com.infomate.chat.dto.MessageDTO;
+import com.infomate.chat.dto.TokenDTO;
 import com.infomate.chat.entity.Chat;
 import com.infomate.chat.service.ChatService;
 import com.infomate.chat.common.ResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -22,6 +26,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import reactor.core.publisher.Flux;
@@ -31,7 +36,7 @@ import java.time.LocalDateTime;
 import java.util.function.BiConsumer;
 
 @RestController
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @Slf4j
 @EnableMongoAuditing
 @EnableAsync
@@ -43,24 +48,33 @@ public class ChatController {
 
     private final SimpMessageSendingOperations simpMessageSendingOperations;
 
-    @Async(value = "asyncThreadPool")
-    @EventListener(SessionConnectEvent.class)
-    public void webSocketConnect(SessionConnectEvent event){
 
-//        log.info("[ChatController](webSocketConnect) principal : {}", principal);
-        log.info("[ChatController](webSocketConnect) event : {}", event);
+    @Value("${server.first.api-token}")
+    private String FIRST_SERVER_API;
 
-        // 계정 정보 받은 후 정보 반응
+    @Value("${server.first.host}")
+    private String FIRST_SERVER;
+
+    public ChatController(ChatService chatService, KafkaTemplate<String, MessageDTO> kafkaTemplate, SimpMessageSendingOperations simpMessageSendingOperations) {
+        this.chatService = chatService;
+        this.kafkaTemplate = kafkaTemplate;
+        this.simpMessageSendingOperations = simpMessageSendingOperations;
     }
 
-    @Async(value = "asyncThreadPool")
-    @EventListener(SessionDisconnectEvent.class)
-    public void webSocketDisConnect(SessionDisconnectEvent event){
 
-        log.info("[ChatController](webSocketDisConnect) event : {}", event);
+    public Mono<TokenDTO> userInfo(String jwt) {
+        return WebClient.create()
+                .post().uri(FIRST_SERVER + "/server/userinfo")
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .header(HttpHeaders.WWW_AUTHENTICATE, FIRST_SERVER_API)
+                .bodyValue(TokenDTO.builder().jwt(jwt).build())
+                .retrieve()
+                .bodyToMono(TokenDTO.class).log();
     }
 
-    @Async(value = "asyncThreadPool")
+
+
+
     @MessageMapping("/chat/{receiver}")
     public void subScriber(@DestinationVariable Integer receiver, MessageDTO message, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
         log.info("[ChatController](subScriber) simpMessageHeaderAccessor : {}", simpMessageHeaderAccessor);
@@ -83,8 +97,8 @@ public class ChatController {
         );
     }
 
-    @Async(value = "asyncThreadPool")
-    @KafkaListener(topics = "topic01", groupId = "foo")
+
+    @KafkaListener(topics = "topic01", groupId = "1")
     public void publisher(@Payload MessageDTO message, SimpMessageHeaderAccessor accessor){
 
         log.info("[ChatController](publisher) receiver : {}", message);

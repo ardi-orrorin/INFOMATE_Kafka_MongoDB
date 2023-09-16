@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -15,7 +14,6 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/calendar")
 @Slf4j
 @RequiredArgsConstructor
-@EnableAsync
 public class CalendarAlertController {
 
     private final CalendarAlertService calendarAlertService;
