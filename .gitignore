@@ -108,7 +108,7 @@ local.properties
 ### Gradle template
 .gradle
 **/build/
-!src/**/build/
+src/**/build/
 build
 
 # Ignore Gradle GUI config
@@ -128,4 +128,5 @@ gradle-app.setting
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
-bin/!/bin/
+bin/
+.idea
