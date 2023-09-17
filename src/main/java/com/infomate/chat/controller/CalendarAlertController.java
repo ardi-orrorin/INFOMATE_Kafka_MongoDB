@@ -31,16 +31,16 @@ public class CalendarAlertController {
         return ResponseEntity.status(HttpStatus.OK.value()).build();
     }
 
-    @PatchMapping("/alert")
+    @PutMapping("/alert")
     public ResponseEntity<?> updateCalendarAlert(@RequestBody CalendarAlertDTO calendarAlertDTO){
-        log.info("[CalendarAlertController](insertCalendarAlert) calendarAlertDTO : {}", calendarAlertDTO);
+        log.info("[CalendarAlertController](updateCalendarAlert) calendarAlertDTO : {}", calendarAlertDTO);
 
-        calendarAlertService.updateCalendarAlert(Mono.just(calendarAlertDTO));
+        calendarAlertService.updateCalendarAlert(calendarAlertDTO);
 
         return ResponseEntity.status(HttpStatus.OK.value()).build();
     }
 
-    @DeleteMapping("alert")
+    @DeleteMapping("/alert")
     public ResponseEntity<?> deleteCalednarAlert(@RequestBody Integer scheduleId){
         calendarAlertService.deleteSchedule(Mono.just(scheduleId));
         return ResponseEntity.status(HttpStatus.OK.value()).build();

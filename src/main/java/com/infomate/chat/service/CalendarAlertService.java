@@ -51,9 +51,6 @@ public class CalendarAlertService {
 
         calendarAlertRepository.save(calendarAlert).subscribe();
 
-//        calendarAlertRepository.insert(calendarAlert);
-//        calendarAlertRepository.insert(calendarAlert);
-
         return true;
     }
 
@@ -76,14 +73,19 @@ public class CalendarAlertService {
 
 
     @Transactional
-    public void updateCalendarAlert(Mono<CalendarAlertDTO> calendarAlertDTO) {
-        calendarAlertDTO.subscribe(schedule -> {
-            Mono<CalendarAlert> calendarAlertMono = calendarAlertRepository.findByScheduleId(schedule.getScheduleId());
-            calendarAlertMono.map(calendarAlert -> {
-                calendarAlert.update(calendarAlertDTO.block());
-                return calendarAlert;
-            });
+    public void updateCalendarAlert(CalendarAlertDTO calendarAlertDTO) {
+        Mono<CalendarAlert> calendarAlertMono = calendarAlertRepository.findByScheduleId(calendarAlertDTO.getScheduleId());
+//        calendarAlertMono.map(calendarAlert -> {
+//            calendarAlert.update(calendarAlertDTO);
+//            return calendarAlert;
+//        }).subscribe();
+        calendarAlertMono.subscribe(calendarAlert -> {
+            calendarAlert.update(calendarAlertDTO);
+            calendarAlertRepository.save(calendarAlert).subscribe();
         });
+
+
+
     }
 }
 
