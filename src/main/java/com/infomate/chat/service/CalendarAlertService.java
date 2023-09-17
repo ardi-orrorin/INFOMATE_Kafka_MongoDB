@@ -67,7 +67,7 @@ public class CalendarAlertService {
     @Transactional
     public void deleteSchedule(Mono<Integer> scheduleId){
         scheduleId.subscribe(id ->
-            calendarAlertRepository.deleteByScheduleId(id)
+            calendarAlertRepository.deleteByScheduleId(id).subscribe()
         );
     }
 
@@ -75,10 +75,7 @@ public class CalendarAlertService {
     @Transactional
     public void updateCalendarAlert(CalendarAlertDTO calendarAlertDTO) {
         Mono<CalendarAlert> calendarAlertMono = calendarAlertRepository.findByScheduleId(calendarAlertDTO.getScheduleId());
-//        calendarAlertMono.map(calendarAlert -> {
-//            calendarAlert.update(calendarAlertDTO);
-//            return calendarAlert;
-//        }).subscribe();
+
         calendarAlertMono.subscribe(calendarAlert -> {
             calendarAlert.update(calendarAlertDTO);
             calendarAlertRepository.save(calendarAlert).subscribe();

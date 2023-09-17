@@ -14,5 +14,5 @@ public interface CalendarAlertRepository extends ReactiveMongoRepository<Calenda
 
     Mono<CalendarAlert> findByScheduleId(Integer scheduleId);
 
-    void deleteByScheduleId(Integer scheduleId);
+    Mono<CalendarAlert> deleteByScheduleId(Integer scheduleId);
 }
