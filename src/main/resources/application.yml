@@ -19,6 +19,9 @@ spring:
       database: test
       authentication-database: test
       #uri: mongodb://test:test@localhost:270
+#      auto-index-creation: true
+#      repositories:
+#        type: reactive
   kafka:
     bootstrap-servers: localhost:29092
 
@@ -31,6 +34,6 @@ logging:
           # mongodb query logging
           mongodb:
             core:
-              MongoTemplate: DEBUG
+#              MongoTemplate: DEBUG
               ReactiveMongoTemplate: DEBUG
 

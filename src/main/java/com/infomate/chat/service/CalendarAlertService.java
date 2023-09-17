@@ -27,30 +27,32 @@ public class CalendarAlertService {
         log.info("[CalendarAlertService](findSchedule) localDateTime: {}",localDateTime);
 
         Flux<CalendarAlert> calendarAlertList =
-                calendarAlertRepository.findAllByEndDateBetween(
+                calendarAlertRepository.findAllByAlertDateBetween(
                         localDateTime,
                         localDateTime.plusMinutes(2).withSecond(0).withNano(999)
                 );
 
         log.info("[CalendarAlertService](findSchedule) calendarAlertList: {}", calendarAlertList);
 
-        if(calendarAlertList.next() == null) return null;
-
         return calendarAlertList.map(calendarAlert ->
                 modelMapper.map(calendarAlert, CalendarAlertDTO.class));
+
 
     }
 
     @Transactional
-    public boolean insertCalendarAlert(Mono<CalendarAlertDTO> calendarAlertDTO) {
+    public boolean insertCalendarAlert(CalendarAlertDTO calendarAlertDTO) {
 
         log.info("[CalendarAlertService](insertCalendarAlert) calendarAlertDTO: {}",calendarAlertDTO);
 
+
         CalendarAlert calendarAlert = modelMapper.map(calendarAlertDTO, CalendarAlert.class);
+        log.info("[CalendarAlertService](insertCalendarAlert) calendarAlert: {}", calendarAlert);
 
-        log.info("[CalendarAlertService](insertCalendarAlert) calendarAlert: {}",calendarAlert);
+        calendarAlertRepository.save(calendarAlert).subscribe();
 
-        calendarAlertRepository.save(calendarAlert);
+//        calendarAlertRepository.insert(calendarAlert);
+//        calendarAlertRepository.insert(calendarAlert);
 
         return true;
     }
@@ -62,7 +64,7 @@ public class CalendarAlertService {
              calendarAlertList.map(calendarAlertDTO ->
                              modelMapper.map(calendarAlertDTO, CalendarAlert.class));
 
-        calendarAlertRepository.deleteAll(calendarAlertListEntity);
+        calendarAlertRepository.deleteAll(calendarAlertListEntity).subscribe();
     }
 
     @Transactional

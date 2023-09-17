@@ -12,8 +12,11 @@ import java.time.LocalDateTime;
 
 @Setter
 @Getter
+@Builder
 @ToString
-@Document(collection = "CalendarAlert")
+@AllArgsConstructor
+@NoArgsConstructor
+@Document("CalendarAlert")
 public class CalendarAlert {
 
     @MongoId

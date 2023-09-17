@@ -22,7 +22,7 @@ public class CalendarAlertController {
     public ResponseEntity<?> insertCalendarAlert(@RequestBody CalendarAlertDTO calendarAlertDTO){
         log.info("[CalendarAlertController](insertCalendarAlert) calendarAlertDTO : {}", calendarAlertDTO);
 
-        boolean result = calendarAlertService.insertCalendarAlert(Mono.just(calendarAlertDTO));
+        boolean result = calendarAlertService.insertCalendarAlert(calendarAlertDTO);
 
         log.info("[CalendarAlertController](insertCalendarAlert) result : {}", result);
 

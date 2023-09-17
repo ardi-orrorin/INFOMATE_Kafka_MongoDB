@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 public interface CalendarAlertRepository extends ReactiveMongoRepository<CalendarAlert, ObjectId> {
 
-    Flux<CalendarAlert> findAllByEndDateBetween(LocalDateTime localDateTime1, LocalDateTime localDateTime2);
+    Flux<CalendarAlert> findAllByAlertDateBetween(LocalDateTime localDateTime1, LocalDateTime localDateTime2);
 
     Mono<CalendarAlert> findByScheduleId(Integer scheduleId);
 
