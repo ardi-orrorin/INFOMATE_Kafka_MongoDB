@@ -12,6 +12,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 
 @Slf4j
@@ -74,12 +75,23 @@ public class CalendarAlertService {
 
     @Transactional
     public void updateCalendarAlert(CalendarAlertDTO calendarAlertDTO) {
+        log.info("[CalendarAlertService](updateCalendarAlert) calendarAlertDTO : {} ", calendarAlertDTO);
         Mono<CalendarAlert> calendarAlertMono = calendarAlertRepository.findByScheduleId(calendarAlertDTO.getScheduleId());
 
-        calendarAlertMono.subscribe(calendarAlert -> {
-            calendarAlert.update(calendarAlertDTO);
-            calendarAlertRepository.save(calendarAlert).subscribe();
-        });
+        log.info("[CalendarAlertService](updateCalendarAlert) calendarAlertMono : {} ", calendarAlertMono);
+
+
+        calendarAlertMono.map(Optional::of)
+                .defaultIfEmpty(Optional.empty())
+                .subscribe( calendarAlert -> {
+                    log.info("[CalendarAlertService](updateCalendarAlert) calendarAlertMono.subscribe calendarAlert : {} ", calendarAlert);
+                    if(calendarAlert.isEmpty() || !calendarAlert.get().getAlertDate().isAfter(LocalDateTime.now().plusMinutes(30))){
+                        insertCalendarAlert(calendarAlertDTO);
+                    }else{
+                        calendarAlert.get().update(calendarAlertDTO);
+                        calendarAlertRepository.save(calendarAlert.get()).subscribe();
+                    }
+                });
 
 
 
