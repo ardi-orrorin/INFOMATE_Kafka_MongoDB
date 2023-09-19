@@ -36,13 +36,8 @@ public class webSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void webSocketConnect(SessionConnectEvent event){
         log.info("[webSocketConfig](webSocketConnect) event : {}", event);
 
-//        log.info("[webSocketConfig](webSocketConnect) i : {}", i);
-
-//        userInfo("sd").subscribe().isDisposed();
-//        log.info("[ChatController](webSocketConnect) principal : {}", principal);
         log.info("[ChatController](webSocketConnect) event : {}", event);
 
-        // 계정 정보 받은 후 정보 반응
     }
 
 

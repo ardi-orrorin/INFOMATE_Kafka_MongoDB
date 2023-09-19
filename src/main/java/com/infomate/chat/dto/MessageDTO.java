@@ -20,19 +20,12 @@ public class MessageDTO {
 
     private int sender;
 
-    private List<Integer> receiveList;
-
     private int chatRoomNo;
-
-    private String subject;
 
     private Object message;
 
-    private String url;
+    private boolean isRead;
 
     private LocalDateTime createDate;
-
-
-
 
 }

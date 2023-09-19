@@ -2,10 +2,10 @@ package com.infomate.chat.entity;
 
 import lombok.*;
 import org.bson.types.ObjectId;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.MongoId;
+import org.springframework.messaging.handler.annotation.Header;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,26 +16,20 @@ import java.util.List;
 @Setter
 @Getter
 @ToString
-@Document(collection = "chat")
-public class Chat {
+@Document(collection = "message")
+public class Message {
 
     @MongoId
     private ObjectId id;
 
-    @Field(name = "sender")
     private int sender;
 
-    @Field(name = "chatRoomNo")
     private int chatRoomNo;
 
-    @Field(name = "receiveList")
-    private List<Integer> receiveList;
-
-//    @CreatedDate
-    @Field(name = "createDate")
-    private LocalDateTime createDate;
-
-    @Field(name = "message")
     private Object message;
+
+    private boolean isRead;
+
+    private LocalDateTime createDate;
 
 }

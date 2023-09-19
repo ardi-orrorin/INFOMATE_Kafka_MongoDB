@@ -10,9 +10,11 @@ import lombok.*;
 @ToString
 public class SessionDTO {
 
-    int membercode;
+    private int membercode;
 
-    String sessionId;
+    private String memberName;
 
-    String JWT;
+    private String sessionId;
+
+    private String JWT;
 }
