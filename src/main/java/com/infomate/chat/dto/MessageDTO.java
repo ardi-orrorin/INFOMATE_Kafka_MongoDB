@@ -1,5 +1,6 @@
 package com.infomate.chat.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import reactor.core.publisher.Flux;
 
@@ -26,6 +27,7 @@ public class MessageDTO {
 
     private boolean isRead;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createDate;
 
 }

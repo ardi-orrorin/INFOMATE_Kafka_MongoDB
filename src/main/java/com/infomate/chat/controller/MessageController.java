@@ -59,6 +59,7 @@ public class MessageController {
         log.info("[ChatController](subScriber) message : {}", message);
 
         message.setCreateDate(LocalDateTime.now());
+        message.setChatRoomNo(receiver);
 
         Mono.just(message).subscribe(messageDTO ->
                 kafkaTemplate.send("topic01", messageDTO).whenComplete(
@@ -93,17 +94,17 @@ public class MessageController {
 
     }
     
-    @GetMapping("/chat/{roomNo}/{memberCode}/{day}")
-    public Flux<Message> findAllMessage(@PathVariable int roomNo,
-                                        @PathVariable int memberCode,
-                                        @PathVariable LocalDate date){
+    @GetMapping("/chat/{roomNo}/{memberCode}")
+    public ResponseEntity<Flux<MessageDTO>> findAllMessage(@PathVariable int roomNo,
+                                        @PathVariable int memberCode){
 
         log.info("[ChatController](findAllMessage) : roomNo : {} ", roomNo);
         log.info("[ChatController](findAllMessage) : memberCode : {} ", memberCode);
-        log.info("[ChatController](findAllMessage) : date : {} ", date);
+//        log.info("[ChatController](findAllMessage) : date : {} ", date);
 
 
-        return chatService.findMessageByDay(roomNo, memberCode, date);
+        return ResponseEntity.ok()
+                .body(chatService.findMessageByDay(roomNo, memberCode, LocalDate.now()));
     }
 
     @GetMapping("/chat/room/{roomId}")

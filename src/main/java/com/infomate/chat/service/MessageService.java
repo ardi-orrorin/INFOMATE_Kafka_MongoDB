@@ -39,13 +39,13 @@ public class MessageService {
                 log.info("[ChatService](insertMessage) chatMono : {}", e));
     }
 
-    public Flux<Message> findMessageByDay(int roomNo, int memberCode, LocalDate date) {
+    public Flux<MessageDTO> findMessageByDay(int roomNo, int memberCode, LocalDate date) {
 
         return messageRepository.findAllByChatRoomNoAndCreateDateBetween(
                 roomNo,
                 LocalDateTime.of(date, LocalTime.MIN),
                 LocalDateTime.of(date, LocalTime.MAX),
                 Sort.by(Sort.Direction.ASC, "createDate")
-        ).log();
+        ).map(message -> modelMapper.map(message, MessageDTO.class)).log();
     }
 }
