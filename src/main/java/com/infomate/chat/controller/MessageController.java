@@ -90,7 +90,7 @@ public class MessageController {
 //                }
 //        );
 
-        simpMessageSendingOperations.convertAndSend("/sub/chatRoom/" + message.getChatRoomNo(), message);
+        simpMessageSendingOperations.convertAndSend("/sub/chat/" + message.getChatRoomNo(), message);
 
     }
     
