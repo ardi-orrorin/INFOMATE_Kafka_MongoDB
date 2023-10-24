@@ -82,14 +82,6 @@ public class MessageController {
         log.info("[ChatController](publisher) receiver : {}", message);
         log.info("[ChatController](publisher) accessor : {}", accessor);
 
-//        message.getReceiveList().forEach(member -> {
-//                    log.info("[ChatController](publisher)  member : {}", member);
-//                    if (member != message.getSender()) {
-//                        simpMessageSendingOperations.convertAndSend("/sub/chat/" + member, message);
-//                    }
-//                }
-//        );
-
         simpMessageSendingOperations.convertAndSend("/sub/chat/" + message.getChatRoomNo(), message);
 
     }
